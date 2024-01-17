@@ -247,5 +247,107 @@ public class ChessPiece {
 
 
     }
+    public void PawnMoves(ChessBoard board, ChessPosition myPosition, PieceType valuetype,
+                            ArrayList<ChessMove> moves, ChessPiece value) {
+        int col = 1;
+        if (value.getTeamColor() == ChessGame.TeamColor.BLACK){
+            col = -1;
+        }
+        int upRow = myPosition.getRow() + col;
+        int upCol = myPosition.getColumn();
+        ChessPosition checkPosition1 = new ChessPosition(upRow,upCol + 1 );
+        ChessPosition checkPosition2 = new ChessPosition(upRow, upCol - 1);
 
+        ChessPiece check1 = board.getPiece(checkPosition1);
+        ChessPiece check2 = board.getPiece(checkPosition2);
+
+            if (check1 == null) {
+                if (check2 == null) {
+                    if (upRow < 8 && upCol < 8 && upRow > 0 && upCol > 0) {
+                        ChessPosition newPosition = new ChessPosition(upRow, upCol);
+                        ChessPiece check = board.getPiece(newPosition);
+
+
+                        if (check == null) {
+                            ChessMove move = new ChessMove(myPosition, newPosition, valuetype);
+                            moves.add(move);
+                        }
+
+
+                    }
+                }
+            }
+
+            else if(check2 == null) {
+                if (upRow < 8 && upCol < 8 && upRow > 0 && upCol > 0) {
+                    ChessPosition newPosition = new ChessPosition(upRow, upCol);
+                    ChessPiece check = board.getPiece(newPosition);
+
+
+                    if (check == null) {
+                        ChessMove move = new ChessMove(myPosition, newPosition, valuetype);
+                        moves.add(move);
+                    }
+
+
+                }
+            }
+
+            else{
+                ChessGame.TeamColor teamcheck = check1.getTeamColor();
+                ChessPosition newPosition = new ChessPosition(upRow, upCol + 1);
+                if (!teamcheck.equals(value.getTeamColor())) {
+                    ChessMove move = new ChessMove(myPosition, newPosition, valuetype);
+                    moves.add(move);
+                }
+
+                ChessGame.TeamColor teamcheck2 = check2.getTeamColor();
+                ChessPosition newPosition2 = new ChessPosition(upRow, upCol - 1);
+                if (!teamcheck2.equals(value.getTeamColor())) {
+                    ChessMove move = new ChessMove(myPosition, newPosition2, valuetype);
+                    moves.add(move);
+                }
+                ChessPosition newPosition3 = new ChessPosition(upRow, upCol);
+                ChessPiece check = board.getPiece(newPosition3);
+
+
+                if (check == null) {
+                    ChessMove move = new ChessMove(myPosition, newPosition3, valuetype);
+                    moves.add(move);
+                }
+
+            }
+
+            if (myPosition.getRow() == 7 && value.getTeamColor() == ChessGame.TeamColor.BLACK) {
+
+                ChessPosition newPosition2 = new ChessPosition(upRow + col, upCol);
+                ChessPiece check2s = board.getPiece(newPosition2);
+                ChessPosition newPosition = new ChessPosition(upRow, upCol);
+                ChessPiece check = board.getPiece(newPosition);
+                if (check== null) {
+                    if (check2s == null) {
+                        ChessMove move = new ChessMove(myPosition, newPosition2, valuetype);
+                        moves.add(move);
+                    }
+                }
+            }
+
+        if (myPosition.getRow() == 2 && value.getTeamColor() == ChessGame.TeamColor.WHITE) {
+
+            ChessPosition newPosition2 = new ChessPosition(upRow + col, upCol);
+            ChessPiece check2s = board.getPiece(newPosition2);
+            ChessPosition newPosition = new ChessPosition(upRow, upCol);
+            ChessPiece check = board.getPiece(newPosition);
+            if (check== null) {
+                if (check2s == null) {
+                    ChessMove move = new ChessMove(myPosition, newPosition2, valuetype);
+                    moves.add(move);
+                }
+            }
+        }
+
+
+
+
+    }
 }
