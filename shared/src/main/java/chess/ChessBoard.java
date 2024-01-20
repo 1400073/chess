@@ -39,6 +39,38 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        ChessPiece rookb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+        ChessPiece horseb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+        ChessPiece bishopb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+        ChessPiece queenb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
+        ChessPiece kingb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+        ChessPiece rookw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+        ChessPiece horsew = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+        ChessPiece bishopw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+        ChessPiece queenw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
+        ChessPiece kingw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+        ChessPiece pawnb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        ChessPiece pawnw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        ChessPosition rookb1 = new ChessPosition(0,0);
+        ChessPosition rookb2 = new ChessPosition(0,7);
+        ChessPosition horseb1 = new ChessPosition(0,1);
+        ChessPosition horseb2 = new ChessPosition(0,6);
+        ChessPosition bishopb1 = new ChessPosition(0, 2);
+        ChessPosition bishopb2 = new ChessPosition(0,5);
+        ChessPosition queenbb = new ChessPosition(0,3);
+        ChessPosition kingbb = new ChessPosition(0,4);
+        for (int i = 0; i < 8; ++i){
+            ChessPosition pawnPosib = new ChessPosition(1,i);
+            ChessPosition pawnPosiw = new ChessPosition(6, i);
+            addPiece(pawnPosib, pawnb);
+            addPiece(pawnPosiw,pawnw);
+        }
+        for(int i = 2; i <= 5; ++i){
+            for (int j = 0; j < 8; ++i){
+                squares[i][j] = null;
+            }
+        }
+        
+
     }
 }
