@@ -31,11 +31,6 @@ public class ChessPiece {
         PAWN
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     /**
      * @return Which team this chess piece belongs to
      */
@@ -84,12 +79,17 @@ public class ChessPiece {
         return moves;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "pieceColor=" + pieceColor +
+                ", type=" + type +
+                '}'+ '\n';
+    }
 
 
     public void BishopMoves(ChessBoard board, ChessPosition myPosition, PieceType valuetype,
-                                             ArrayList<ChessMove> moves, ChessPiece value) {
+                            ArrayList<ChessMove> moves, ChessPiece value) {
             int i = 1;
             int j = 1;
             while(i <= 8 - myPosition.getRow() && j <= 8 - myPosition.getColumn() ){
