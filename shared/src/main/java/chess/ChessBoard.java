@@ -57,23 +57,23 @@ public class ChessBoard {
         ChessPiece pawnb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         ChessPiece pawnw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
 
-        ChessPosition rookb1 = new ChessPosition(1,1);
-        ChessPosition horseb1 = new ChessPosition(1,2);
-        ChessPosition bishopb1 = new ChessPosition(1, 3);
-        ChessPosition queenbb = new ChessPosition(1,4);
-        ChessPosition kingbb = new ChessPosition(1,5);
-        ChessPosition bishopb2 = new ChessPosition(1,6);
-        ChessPosition horseb2 = new ChessPosition(1,7);
-        ChessPosition rookb2 = new ChessPosition(1,8);
+        ChessPosition rookb1 = new ChessPosition(8,1);
+        ChessPosition horseb1 = new ChessPosition(8,2);
+        ChessPosition bishopb1 = new ChessPosition(8, 3);
+        ChessPosition queenbb = new ChessPosition(8,4);
+        ChessPosition kingbb = new ChessPosition(8,5);
+        ChessPosition bishopb2 = new ChessPosition(8,6);
+        ChessPosition horseb2 = new ChessPosition(8,7);
+        ChessPosition rookb2 = new ChessPosition(8,8);
 
-        ChessPosition rookw1 = new ChessPosition(8,1);
-        ChessPosition horsew1 = new ChessPosition(8,2);
-        ChessPosition bishopw1 = new ChessPosition(8, 3);
-        ChessPosition queenww = new ChessPosition(8,4);
-        ChessPosition kingww = new ChessPosition(8, 5);
-        ChessPosition bishopw2 = new ChessPosition(8,6);
-        ChessPosition horsew2 = new ChessPosition(8,7);
-        ChessPosition rookw2 = new ChessPosition(8,8);
+        ChessPosition rookw1 = new ChessPosition(1,1);
+        ChessPosition horsew1 = new ChessPosition(1,2);
+        ChessPosition bishopw1 = new ChessPosition(1, 3);
+        ChessPosition queenww = new ChessPosition(1,4);
+        ChessPosition kingww = new ChessPosition(1, 5);
+        ChessPosition bishopw2 = new ChessPosition(1,6);
+        ChessPosition horsew2 = new ChessPosition(1,7);
+        ChessPosition rookw2 = new ChessPosition(1,8);
 
         for (int i = 1; i <= 8; ++i){
             ChessPosition pawnPosib = new ChessPosition(7,i);
@@ -111,7 +111,7 @@ public class ChessBoard {
     @Override
     public String toString() {
         return "ChessBoard{" +
-                "squares=" + Arrays.toString(squares) +
+                "squares=" + Arrays.deepToString(squares) +
                 '}';
     }
 }

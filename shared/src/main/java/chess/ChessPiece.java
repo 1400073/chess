@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -87,6 +88,18 @@ public class ChessPiece {
                 '}'+ '\n';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
+    }
 
     public void BishopMoves(ChessBoard board, ChessPosition myPosition, PieceType valuetype,
                             ArrayList<ChessMove> moves, ChessPiece value) {
@@ -270,7 +283,7 @@ public class ChessPiece {
 
             if (check1 == null) {
                 if (check2 == null) {
-                    if (upRow <= 8 && upCol < 8 && upRow > 0 && upCol > 0) {
+                    if (upRow <= 8 && upCol <= 8 && upRow >= 0 && upCol >= 0) {
                         ChessPosition newPosition = new ChessPosition(upRow, upCol);
                         ChessPiece check = board.getPiece(newPosition);
 
@@ -283,10 +296,28 @@ public class ChessPiece {
 
                     }
                 }
+                else {
+                    ChessGame.TeamColor teamcheck2 = check2.getTeamColor();
+                    ChessPosition newPosition2 = new ChessPosition(upRow, upCol - 1);
+                    if (!teamcheck2.equals(value.getTeamColor())) {
+                        ChessMove move = new ChessMove(myPosition, newPosition2, valuetype);
+                        moves.add(move);
+                    }
+                    if (upRow <= 8 && upCol <= 8 && upRow >= 0 && upCol >= 0) {
+                        ChessPosition newPosition = new ChessPosition(upRow, upCol);
+                        ChessPiece check = board.getPiece(newPosition);
+
+
+                        if (check == null) {
+                            ChessMove move = new ChessMove(myPosition, newPosition, valuetype);
+                            moves.add(move);
+                        }
+                    }
+                }
             }
 
             else if(check2 == null) {
-                if (upRow < 8 && upCol < 8 && upRow > 0 && upCol > 0) {
+                if (upRow <= 8 && upCol <= 8 && upRow >= 0 && upCol >= 0) {
                     ChessPosition newPosition = new ChessPosition(upRow, upCol);
                     ChessPiece check = board.getPiece(newPosition);
 
@@ -362,6 +393,9 @@ public class ChessPiece {
                     moves.add(move);
                 }
             }
+        }
+        if (myPosition.getRow()==8 && value.getTeamColor() == ChessGame.TeamColor.WHITE){
+
         }
 
 
