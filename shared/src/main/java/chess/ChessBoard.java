@@ -11,7 +11,27 @@ import java.util.Arrays;
 public class ChessBoard {
     private ChessPiece[][] squares = new ChessPiece[8][8];
     public ChessBoard() {
-        
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        chess.ChessBoard that = (chess.ChessBoard) o;
+        return Arrays.deepEquals(squares, that.squares);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(squares);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessBoard{" +
+                "squares=" + Arrays.deepToString(squares) +
+                '}';
     }
 
     /**
@@ -21,8 +41,8 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        squares[position.getRow()-1][position.getColumn()-1] = piece;
 
+        squares[position.getRow()-1][position.getColumn()-1] = piece;
     }
 
     /**
@@ -36,95 +56,80 @@ public class ChessBoard {
         return squares[position.getRow()-1][position.getColumn()-1];
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ChessBoard that = (ChessBoard) o;
-        return Arrays.deepEquals(squares, that.squares);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.deepHashCode(squares);
-    }
-
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-
         ChessPiece rookb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
-        ChessPiece horseb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
-        ChessPiece bishopb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
-        ChessPiece queenb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
-        ChessPiece kingb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
-
         ChessPiece rookw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+
+        ChessPiece horseb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
         ChessPiece horsew = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+
+        ChessPiece bishopb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
         ChessPiece bishopw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
-        ChessPiece queenw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
+
+        ChessPiece kingb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
         ChessPiece kingw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+
+        ChessPiece queenb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
+        ChessPiece queenw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
 
         ChessPiece pawnb = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         ChessPiece pawnw = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
 
-        ChessPosition rookb1 = new ChessPosition(8,1);
-        ChessPosition horseb1 = new ChessPosition(8,2);
-        ChessPosition bishopb1 = new ChessPosition(8, 3);
-        ChessPosition queenbb = new ChessPosition(8,4);
-        ChessPosition kingbb = new ChessPosition(8,5);
-        ChessPosition bishopb2 = new ChessPosition(8,6);
-        ChessPosition horseb2 = new ChessPosition(8,7);
-        ChessPosition rookb2 = new ChessPosition(8,8);
 
-        ChessPosition rookw1 = new ChessPosition(1,1);
-        ChessPosition horsew1 = new ChessPosition(1,2);
-        ChessPosition bishopw1 = new ChessPosition(1, 3);
-        ChessPosition queenww = new ChessPosition(1,4);
-        ChessPosition kingww = new ChessPosition(1, 5);
-        ChessPosition bishopw2 = new ChessPosition(1,6);
-        ChessPosition horsew2 = new ChessPosition(1,7);
-        ChessPosition rookw2 = new ChessPosition(1,8);
+        ChessPosition rookb1 = new ChessPosition(8,8);
+        ChessPosition rookb2 = new ChessPosition(8,1);
+        ChessPosition rookw1 = new ChessPosition(1,8);
+        ChessPosition rookw2 = new ChessPosition(1,1);
 
-        for (int i = 1; i <= 8; ++i){
-            ChessPosition pawnPosib = new ChessPosition(7,i);
-            ChessPosition pawnPosiw = new ChessPosition(2, i);
-            addPiece(pawnPosib, pawnb);
-            addPiece(pawnPosiw, pawnw);
+        ChessPosition horseb1 = new ChessPosition(8,7);
+        ChessPosition horseb2 = new ChessPosition(8,2);
+        ChessPosition horsew1 = new ChessPosition(1,7);
+        ChessPosition horsew2 = new ChessPosition(1,2);
+
+        ChessPosition bishopb1 = new ChessPosition(8,6);
+        ChessPosition bishopb2 = new ChessPosition(8,3);
+        ChessPosition bishopw1 = new ChessPosition(1,6);
+        ChessPosition bishopw2 = new ChessPosition(1,3);
+
+        ChessPosition kingb1 = new ChessPosition(8,5);
+        ChessPosition kingw1 = new ChessPosition(1,5);
+        ChessPosition queenb1 = new ChessPosition(8,4);
+        ChessPosition queenw1 = new ChessPosition(1,4);
+
+        for(int i =1; i <=8; ++i){
+            ChessPosition pawnw1 = new ChessPosition(2,i);
+            ChessPosition pawnb1 = new ChessPosition(7,i);
+            addPiece(pawnb1,pawnb);
+            addPiece(pawnw1,pawnw);
         }
-
-        for(int i = 2; i <= 5; ++i){
-            for (int j = 0; j < 8; ++j){
-                squares[i][j] = null;
+        for(int i = 1; i <=8;++i){
+            for(int j = 3; j <=6;++j){
+                ChessPosition null1 = new ChessPosition(j,i);
+                addPiece(null1,null);
             }
         }
-
         addPiece(rookb1,rookb);
         addPiece(rookb2,rookb);
-        addPiece(horseb1,horseb);
-        addPiece(horseb2,horseb);
-        addPiece(bishopb1,bishopb);
-        addPiece(bishopb2,bishopb);
-        addPiece(queenbb,queenb);
-        addPiece(kingbb,kingb);
-
         addPiece(rookw1,rookw);
         addPiece(rookw2,rookw);
+
+        addPiece(horseb1,horseb);
+        addPiece(horseb2,horseb);
         addPiece(horsew1,horsew);
         addPiece(horsew2,horsew);
+
+        addPiece(bishopb1,bishopb);
+        addPiece(bishopb2,bishopb);
         addPiece(bishopw1,bishopw);
         addPiece(bishopw2,bishopw);
-        addPiece(queenww,queenw);
-        addPiece(kingww,kingw);
 
-    }
-
-    @Override
-    public String toString() {
-        return "ChessBoard{" +
-                "squares=" + Arrays.deepToString(squares) +
-                '}';
+        addPiece(kingb1,kingb);
+        addPiece(kingw1,kingw);
+        addPiece(queenb1,queenb);
+        addPiece(queenw1,queenw);
     }
 }
