@@ -192,21 +192,110 @@ public class ChessGame {
         }
         return checker;
     }
-    public void arrayCompRe(Collection<ChessMove> moves, Collection<ChessMove> moves2){
+    public void arrayCompRe(Collection<ChessMove> moves, Collection<ChessMove> moves2,ChessPosition getPosition){
+        ChessPiece value = board.getPiece(getPosition);
+        int i = 1;
+        if(value.getTeamColor() == ChessGame.TeamColor.BLACK){
+            i = -1;
+        }
+        if (value.getPieceType() == ChessPiece.PieceType.PAWN){
+            ChessPosition newPosition1 = new ChessPosition(getPosition.getRow() + i, getPosition.getColumn() + 1);
+            ChessPosition newPosition2 = new ChessPosition(getPosition.getRow() + i, getPosition.getColumn() - 1);
+            ChessMove move = new ChessMove(getPosition,newPosition1,null);
+            ChessMove move2 = new ChessMove(getPosition,newPosition2,null);
+            moves.add(move);
+            moves.add(move2);
+        }
 
-        Iterator<ChessMove> iterator = moves.iterator();
         Iterator<ChessMove> iterator1 = moves2.iterator();
 
-        while(iterator.hasNext()){
-            ChessMove check = iterator.next();
-            while(iterator1.hasNext()) {
-                ChessMove check1 = iterator1.next();
-                if (check.equals(check1)) {
+        while(iterator1.hasNext()){
+            ChessMove check = iterator1.next();
+            for (ChessMove check1 : moves) {
+                if (check.getEndPosition().equals(check1.getEndPosition())) {
                     iterator1.remove();
                 }
             }
         }
 
+        Iterator<ChessMove> iterator2 = moves2.iterator();
+        while(iterator2.hasNext()){
+            ChessMove check = iterator2.next();
+            ChessPiece piece = board.getPiece(check.getStartPosition());
+            ChessPosition getposition1 = check.getStartPosition();
+            ChessPosition getposition2 = check.getEndPosition();
+            ChessPiece piece2 = board.getPiece(getposition2);
+            if(piece2 != null){
+                board.addPiece(check.getStartPosition(), null);
+                board.addPiece(check.getEndPosition(), piece);
+                if (!isInCheck(getTeamTurn())) {
+                    board.addPiece(getposition1, piece);
+                    board.addPiece(getposition2, piece2);
+                } else {
+                    board.addPiece(getposition1, piece);
+                    board.addPiece(getposition2, piece2);
+                    iterator2.remove();
+
+                }
+            }
+            else {
+                board.addPiece(check.getStartPosition(), null);
+                board.addPiece(check.getEndPosition(), piece);
+                if (!isInCheck(getTeamTurn())) {
+                    board.addPiece(getposition1, piece);
+                    board.addPiece(getposition2, null);
+                } else {
+                    board.addPiece(getposition1, piece);
+                    board.addPiece(getposition2, null);
+                    iterator2.remove();
+
+                }
+            }
+        }
+
+
+    }
+
+    public boolean arrayCheckCheck(Collection<ChessMove> moves, ChessPosition checkPos){
+        boolean checker = false;
+        Iterator<ChessMove> iterator = moves.iterator();
+        while(iterator.hasNext()){
+            ChessMove check = iterator.next();
+            if(check.getEndPosition().equals(checkPos)){
+                checker = true;
+                ChessPiece piece = board.getPiece(check.getStartPosition());
+                ChessPosition getposition1 = check.getStartPosition();
+                ChessPosition getposition2 = check.getEndPosition();
+                ChessPiece piece2 = board.getPiece(getposition2);
+                if(piece2 != null){
+                    board.addPiece(check.getStartPosition(), null);
+                    board.addPiece(check.getEndPosition(), piece);
+                    if (!isInCheck(getTeamTurn())) {
+                        board.addPiece(getposition1, piece);
+                        board.addPiece(getposition2, piece2);
+                    } else {
+                        board.addPiece(getposition1, piece);
+                        board.addPiece(getposition2, piece2);
+                        checker = false;
+
+                    }
+                }
+                else {
+                    board.addPiece(check.getStartPosition(), null);
+                    board.addPiece(check.getEndPosition(), piece);
+                    if (!isInCheck(getTeamTurn())) {
+                        board.addPiece(getposition1, piece);
+                        board.addPiece(getposition2, null);
+                    } else {
+                        board.addPiece(getposition1, piece);
+                        board.addPiece(getposition2, null);
+                        checker = false;
+
+                    }
+                }
+            }
+        }
+        return checker;
     }
 
     /**
@@ -229,40 +318,34 @@ public class ChessGame {
            Collection<ChessMove> moves;
            moves = piecek.pieceMoves(board, posKing);
            ChessPosition squareCheck = getCheckPosition(posKing);
+           boolean tempCheck = false;
+           boolean tempCheck2 = false;
 
            for(int i = 1; i <= 8; ++i){
                for(int j = 1; j <= 8; ++j){
                    ChessPosition getposition = new ChessPosition(i,j);
                    ChessPiece piece = board.getPiece(getposition);
                    if (piece != null) {
-                       if (piece.getTeamColor() == opposeTeam && piece.getPieceType() != ChessPiece.PieceType.KING) {
+                       if (piece.getTeamColor() == opposeTeam) {
                            Collection<ChessMove> moves1;
                            moves1 = piece.pieceMoves(board,getposition);
-                           arrayCompRe(moves1,moves);
+                           arrayCompRe(moves1, moves, getposition);
+
                        }
-                       
+                       if (piece.getTeamColor() == teamColor) {
+                           Collection<ChessMove> moves2;
+
+                           moves2 = piece.pieceMoves(board, getposition);
+                           tempCheck= arrayCheckCheck(moves2, squareCheck);
+                           tempCheck2 = arrayCheckCheck(moves2, checkPosition);
+
+                       }
+
                    }
                }
            }
-           if(moves.isEmpty()){
-
-
-               for(int i = 1; i <= 8; ++i){
-                   for(int j = 1; j <= 8; ++j){
-                       ChessPosition getposition = new ChessPosition(i,j);
-                       ChessPiece piece = board.getPiece(getposition);
-                       if (piece != null) {
-                           if (piece.getTeamColor() == opposeTeam && piece.getPieceType() != ChessPiece.PieceType.KING) {
-                               Collection<ChessMove> moves2;
-                               boolean tempCheck = false;
-                               moves2 = piece.pieceMoves(board, getposition);
-                               tempCheck= arrayCheck(moves2, squareCheck);
-
-                           }
-                       }
-                   }
-               }
-
+           if(moves.isEmpty()&& !tempCheck && !tempCheck2){
+               checkMate = true;
            }
 
 
@@ -270,6 +353,7 @@ public class ChessGame {
 
        return checkMate;
     }
+
 public ChessPosition getCheckPosition(ChessPosition posKing){
         ChessPosition squareCheck = new ChessPosition(0,0);
 
@@ -348,6 +432,54 @@ public ChessPosition getCheckPosition(ChessPosition posKing){
      */
     public boolean isInStalemate(TeamColor teamColor) {
         boolean staleMate = false;
+
+        ChessPosition posKing = findKing(board, teamColor);
+        ChessPiece piecek = board.getPiece(posKing);
+        TeamColor opposeTeam = TeamColor.BLACK;
+        if(teamColor == TeamColor.BLACK){
+            opposeTeam = TeamColor.WHITE;
+        }
+
+        if(!isInCheck(teamColor)){
+            Collection<ChessMove> moves;
+            moves = piecek.pieceMoves(board, posKing);
+            ChessPosition squareCheck = getCheckPosition(posKing);
+            boolean tempCheck = false;
+            boolean tempCheck2 = false;
+
+            for(int i = 1; i <= 8; ++i){
+                for(int j = 1; j <= 8; ++j){
+                    ChessPosition getposition = new ChessPosition(i,j);
+                    ChessPiece piece = board.getPiece(getposition);
+                    if (piece != null) {
+                        if (piece.getTeamColor() == opposeTeam) {
+                            Collection<ChessMove> moves1;
+                            moves1 = piece.pieceMoves(board,getposition);
+                            arrayCompRe(moves1,moves, getposition);
+                        }
+                        if (piece.getTeamColor() == teamColor && piece.getPieceType() != ChessPiece.PieceType.KING) {
+                            Collection<ChessMove> moves2;
+
+                            moves2 = piece.pieceMoves(board, getposition);
+                            if(!moves2.isEmpty()){
+                                tempCheck = false;
+                            }
+                            else{
+                                tempCheck = true;
+                            }
+
+                        }
+
+
+                    }
+                }
+            }
+            if(moves.isEmpty()&& !tempCheck){
+                staleMate = true;
+            }
+
+
+        }
 
         return staleMate;
     }
