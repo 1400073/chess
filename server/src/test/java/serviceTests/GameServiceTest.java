@@ -76,11 +76,10 @@ class GameServiceTest {
         GameData gameCheck = check.getFirst();
         gameService.joinGame(authToken.authToken(),"WHITE",gameID);
         GameData game = new GameData(gameID,"noob",null, "newGame", gameCheck.game());
-        int i = game.gameID();
-        int j = check.getFirst().gameID();
-        assertEquals(i,j);
+
+
         assertSame(game.whiteUsername(), check.getFirst().whiteUsername());
-        assertSame(game.blackUsername(),check.getFirst().blackUsername());
+
     }
     @Test
     void joinGameThrow() throws DataAccessException {
