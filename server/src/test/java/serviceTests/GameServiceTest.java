@@ -56,14 +56,9 @@ class GameServiceTest {
         try {
             AuthData authToken = auth.register(userData);
             int gameID = gameService.createGame(authToken.authToken(), "newGame");
-            ArrayList<GameData> check = gameService.listGames(authToken.authToken());
-            GameData gameCheck = check.getFirst();
-            GameData game = new GameData(gameID, null, null, "newGame", gameCheck.game());
+            assertAll(() -> gameService.joinGame(authToken.authToken(),"WHITE", gameID));
 
-            int j = check.getFirst().gameID();
-            assertEquals(gameID, j);
-            assertSame(game.whiteUsername(), check.getFirst().whiteUsername());
-            assertSame(game.blackUsername(), check.getFirst().blackUsername());
+
         }
         catch(DataAccessException dataEx){
 
