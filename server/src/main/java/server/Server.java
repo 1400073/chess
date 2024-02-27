@@ -47,17 +47,7 @@ public class Server {
             return new Gson().toJson(gameID);}
         catch (DataAccessException dataEx){
             String check = dataEx.getMessage();
-            if(Objects.equals(check, "unauthorized")){
-                response.status(401);
-            }
-
-            if(Objects.equals(check, "bad request")){
-                response.status(400);
-            }
-
-            if(Objects.equals(check, "already taken")){
-                response.status(403);
-            }
+            dataException(check,response);
 
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
@@ -76,17 +66,7 @@ public class Server {
         }
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
-            if(Objects.equals(check, "unauthorized")){
-                response.status(401);
-            }
-
-            if(Objects.equals(check, "bad request")){
-                response.status(400);
-            }
-
-            if(Objects.equals(check, "already taken")){
-                response.status(403);
-            }
+            dataException(check,response);
 
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
@@ -121,18 +101,7 @@ public class Server {
         return "{}";}
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
-            if(Objects.equals(check, "unauthorized")){
-                response.status(401);
-            }
-
-            if(Objects.equals(check, "bad request")){
-                response.status(400);
-            }
-
-            if(Objects.equals(check, "already taken")){
-                response.status(403);
-            }
-
+            dataException(check,response);
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
     }
@@ -148,18 +117,7 @@ public class Server {
         return new Gson().toJson(auth);}
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
-            if(Objects.equals(check, "unauthorized")){
-                response.status(401);
-            }
-
-            if(Objects.equals(check, "bad request")){
-                response.status(400);
-            }
-
-            if(Objects.equals(check, "already taken")){
-                response.status(403);
-            }
-
+            dataException(check,response);
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
     }
@@ -172,27 +130,28 @@ public class Server {
         UserData registerRequest = serialzer.fromJson(request.body(), UserData.class);
         try {
             AuthData auth = userService.register(registerRequest);
-
+            ;
             return new Gson().toJson(auth);
         }
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
-            if(Objects.equals(check, "unauthorized")){
-                response.status(401);
-            }
-
-            if(Objects.equals(check, "bad request")){
-                response.status(400);
-            }
-
-            if(Objects.equals(check, "already taken")){
-                response.status(403);
-            }
-
+            dataException(check, response);
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
     }
+    public void dataException(String check, Response response){
+        if(Objects.equals(check, "unauthorized")){
+            response.status(401);
+        }
 
+        if(Objects.equals(check, "bad request")){
+            response.status(400);
+        }
+
+        if(Objects.equals(check, "already taken")){
+            response.status(403);
+        }
+    }
     public void stop() {
         Spark.stop();
         Spark.awaitStop();
