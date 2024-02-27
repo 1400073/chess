@@ -11,6 +11,8 @@ public interface AuthInterface {
 
     void deleteAuth(String authorization)throws DataAccessException;
 
+    String getUsername(String authToken)throws DataAccessException;
+
 
     void clear();
 }

@@ -1,12 +1,16 @@
 package server;
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import model.AuthData;
+import dataAccess.Game;
+import model.*;
 import service.GameService;
 import service.UserService;
 import service.ClearService;
 
 import spark.*;
+
+import java.util.Map;
+import java.util.Objects;
 
 public class Server {
 
@@ -14,6 +18,7 @@ public class Server {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
+
         Spark.post("/user", this::register);
         Spark.post("/session", this::login);
         Spark.delete("/session", this::logout);
@@ -25,39 +30,166 @@ public class Server {
         Spark.awaitInitialization();
         return Spark.port();
     }
-    record gameName(String gameName){}
+
     private Object clear(Request request, Response response) {
 
-
+        ClearService clear = new ClearService();
+        clear.clear();
+        return "{}";
     }
 
     private Object createGame(Request request, Response response) throws DataAccessException {
         var serialzer = new Gson();
-        String auth = request.headers("authorization");
+        String authToken = request.headers("authorization");
         gameName name = serialzer.fromJson(request.body(), gameName.class);
         GameService gameService = new GameService();
-        int gameID = gameService.CreateGame(auth, name.gameName());
-        return new Gson().toJson(gameID);
+        try{gameNum gameID = new gameNum(gameService.CreateGame(authToken, name.gameName()));
+            return new Gson().toJson(gameID);}
+        catch (DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            if(Objects.equals(check, "unauthorized")){
+                response.status(401);
+            }
+
+            if(Objects.equals(check, "bad request")){
+                response.status(400);
+            }
+
+            if(Objects.equals(check, "already taken")){
+                response.status(403);
+            }
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
+
+
+
     }
 
-    private Object joinGame(Request request, Response response) {
+    private Object joinGame(Request request, Response response) throws DataAccessException {
+        var serialzer = new Gson();
+        String authToken = request.headers("authorization");
+        joinGame gameRequest = serialzer.fromJson(request.body(), joinGame.class);
+        GameService gameService = new GameService();
+        try{gameService.JoinGame(authToken,gameRequest.playerColor(), gameRequest.gameID());
+            return "{}";
+        }
+        catch(DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            if(Objects.equals(check, "unauthorized")){
+                response.status(401);
+            }
 
-        
+            if(Objects.equals(check, "bad request")){
+                response.status(400);
+            }
+
+            if(Objects.equals(check, "already taken")){
+                response.status(403);
+            }
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
+
+
     }
 
-    private Object listGames(Request request, Response response) {
+    private Object listGames(Request request, Response response) throws DataAccessException{
+        String authToken = request.headers("authorization");
+        GameService gameService = new GameService();
+        try{listGames games = new listGames(gameService.ListGames(authToken));
+            return new Gson().toJson(games);
+        }
+        catch(DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            if(Objects.equals(check, "unauthorized")){
+                response.status(401);
+            }
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
+
+
     }
 
-    private void logout(Request request, Response response) {
+    private Object logout(Request request, Response response) throws DataAccessException {
+        String authToken = request.headers("authorization");
+        UserService userService = new UserService();
 
+        try {userService.logout(authToken);
+        return "{}";}
+        catch(DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            if(Objects.equals(check, "unauthorized")){
+                response.status(401);
+            }
+
+            if(Objects.equals(check, "bad request")){
+                response.status(400);
+            }
+
+            if(Objects.equals(check, "already taken")){
+                response.status(403);
+            }
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
     }
 
-    private Object login(Request request, Response response) {
+    private Object login(Request request, Response response) throws DataAccessException {
+        var serialzer = new Gson();
+        String authToken = request.headers("authorization");
+        UserService userService = new UserService();
 
+        UserData loginRequest = serialzer.fromJson(request.body(), UserData.class);
+        try{AuthData auth = userService.login(loginRequest);
+
+        return new Gson().toJson(auth);}
+        catch(DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            if(Objects.equals(check, "unauthorized")){
+                response.status(401);
+            }
+
+            if(Objects.equals(check, "bad request")){
+                response.status(400);
+            }
+
+            if(Objects.equals(check, "already taken")){
+                response.status(403);
+            }
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
     }
 
-    private Object register(Request req, Response res){
+    private Object register(Request request, Response response) throws DataAccessException {
+        var serialzer = new Gson();
+        String authToken = request.headers("authorization");
+        UserService userService = new UserService();
 
+        UserData registerRequest = serialzer.fromJson(request.body(), UserData.class);
+        try {
+            AuthData auth = userService.register(registerRequest);
+
+            return new Gson().toJson(auth);
+        }
+        catch(DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            if(Objects.equals(check, "unauthorized")){
+                response.status(401);
+            }
+
+            if(Objects.equals(check, "bad request")){
+                response.status(400);
+            }
+
+            if(Objects.equals(check, "already taken")){
+                response.status(403);
+            }
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
     }
 
     public void stop() {

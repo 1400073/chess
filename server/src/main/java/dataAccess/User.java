@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class User implements UserInterface{
-    private ArrayList<UserData> users;
+    private final static ArrayList<UserData> users = new ArrayList<>();
 
     public void createUser(String username, String password, String email){
         UserData userDataTemp = new UserData(username,password,email);
@@ -15,18 +15,24 @@ public class User implements UserInterface{
     public UserData getUser(String username)throws DataAccessException{
         int i = 0;
         UserData user = null;
-        while(i < users.size()){
-            UserData userTemp = users.get(i);
-            if(Objects.equals(userTemp.username(), username)){
-                user = users.get(i);
-            }
-            i +=1;
+        if(!users.isEmpty()) {
+            while (i < users.size()) {
+                UserData userTemp = users.get(i);
+                if (Objects.equals(userTemp.username(), username)) {
+                    user = users.get(i);
+                }
+                i += 1;
 
+            }
         }
+
+
         return user;
     }
     public void clear(){
-        users.clear();
+        if(!users.isEmpty()) {
+            users.clear();
+        }
     }
 
 

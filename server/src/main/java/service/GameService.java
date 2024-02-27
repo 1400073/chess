@@ -28,13 +28,14 @@ public class GameService {
         return gameID;
     }
 
-    public void JoinGame(AuthData authToken, String TeamColor, int gameID) throws DataAccessException {
+    public void JoinGame(String authToken, String TeamColor, int gameID) throws DataAccessException {
         Auth auth = new Auth();
         Game game = new Game();
 
-        String authorization = auth.getAuth(authToken.authToken());
+        String authorization = auth.getAuth(authToken);
+        String username = auth.getUsername(authorization);
 
-        game.updateGame(authToken.username(),gameID, true, TeamColor);
+        game.updateGame(username,gameID, true, TeamColor);
 
     }
 

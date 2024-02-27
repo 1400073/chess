@@ -12,9 +12,13 @@ public class UserService {
       User userInterface = new User();
       UserData checkUser = userInterface.getUser(user.username());
       Auth authInterface = new Auth();
-      if(checkUser.username() == null){
-         userInterface.createUser(user.username(), user.password(), user.email());
-
+      if(checkUser == null){
+         if(user.password()!= null) {
+            userInterface.createUser(user.username(), user.password(), user.email());
+         }
+         else{
+            throw new DataAccessException("bad request");
+         }
       }
       else{
          throw new DataAccessException("already taken");
@@ -25,7 +29,10 @@ public class UserService {
       User userInterface = new User();
       UserData checkUser = userInterface.getUser(user.username());
 
-      if(!Objects.equals(user.password(), checkUser.password()) || checkUser.username() == null){
+      if(checkUser == null){
+         throw new DataAccessException("unauthorized");
+      }
+      if(!Objects.equals(user.password(), checkUser.password())){
          throw new DataAccessException("unauthorized");
       }
       Auth authInterface = new Auth();
@@ -33,11 +40,9 @@ public class UserService {
 
    }
 
-   public void logout(UserData user) throws DataAccessException {
+   public void logout(String authToken) throws DataAccessException {
       Auth auth = new Auth();
-      AuthData tempAuth = auth.getAuthToken(user.username());
-      String tempAuthorization = auth.getAuth(tempAuth.authToken());
-      auth.deleteAuth(tempAuthorization);
+      auth.deleteAuth(authToken);
 
    }
 

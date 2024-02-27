@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Game implements GameInterface{
-    private ArrayList<GameData> games;
+    private final static ArrayList<GameData> games = new ArrayList<>();
 
     public int GenerateNum(){
         String RandNumTake = "0123456789";
@@ -36,7 +36,7 @@ public class Game implements GameInterface{
             gameID = GenerateNum();
         }
 
-        GameData newGame = new GameData(gameID, "", "",gameName, game);
+        GameData newGame = new GameData(gameID, null, null,gameName, game);
         games.add(newGame);
         return gameID;
     }
@@ -44,44 +44,77 @@ public class Game implements GameInterface{
     public boolean checkGameID(int gameID){
         boolean check = false;
         int i =0;
-        while(i < games.size()){
-            GameData game = games.get(i);
-            if(game.gameID()== gameID){
-                check= true;
+
+        if(games!= null) {
+            while (i < games.size()) {
+                GameData game = games.get(i);
+                if (game.gameID() == gameID) {
+                    check = true;
+                }
+                i += 1;
             }
-            i +=1;
         }
         return check;
     }
     public GameData getGame(int gameID) throws DataAccessException {
         int i =0;
-        while(i < games.size()){
-            GameData game = games.get(i);
-            if(game.gameID()== gameID){
-                return game;
+        GameData game = null;
+        if(!games.isEmpty()) {
+            while (i < games.size()) {
+
+                if (games.get(i).gameID() == gameID) {
+                    game = games.get(i);
+                }
+                i += 1;
             }
-            i +=1;
         }
 
-        throw new DataAccessException("bad request");
+        if (game == null) {
+            throw new DataAccessException("bad request");
+        }
+
+        return game;
     }
 
+    public int getGameNum(int gameID) throws DataAccessException {
+        int i =0;
+        int findNum = 0;
+        boolean foundNum = false;
+        if(!games.isEmpty()) {
+            while (i < games.size()) {
+
+                if (games.get(i).gameID() == gameID) {
+                    findNum = i;
+                    foundNum = true;
+
+                }
+                i += 1;
+            }
+        }
+
+        if (!foundNum) {
+            throw new DataAccessException("bad request");
+        }
+
+        return findNum;
+    }
 
 
     public ArrayList<GameData> listGames(){
         return games;
     }
 
-    public void updateGame(String username, int gameID,boolean join, String teamColor) throws DataAccessException {
+    public void updateGame(String username, int gameID, boolean join, String teamColor) throws DataAccessException {
         if(!Objects.equals(username, "")){
             GameData game = getGame(gameID);
+            int gameNum = getGameNum(gameID);
             if(join){
                 if(Objects.equals(teamColor, "BLACK")){
-                    if(Objects.equals(game.blackUsername(), "")){
+                    if(Objects.equals(game.blackUsername(), null)){
                         String whiteUsername = game.whiteUsername();
                         ChessGame game1 = game.game();
                         String gameName = game.gameName();
-                        game = new GameData(gameID,whiteUsername, username, gameName, game1);
+                        games.set(gameNum, new GameData(gameID, whiteUsername, username, gameName, game1));
 
                     }
                     else{
@@ -90,15 +123,18 @@ public class Game implements GameInterface{
                 }
 
                 else if(Objects.equals(teamColor, "WHITE")){
-                    if(Objects.equals(game.whiteUsername(), "")){
+                    if(Objects.equals(game.whiteUsername(), null)){
                         String blackUsername = game.blackUsername();
                         ChessGame game1 = game.game();
                         String gameName = game.gameName();
-                        game = new GameData(gameID,username, blackUsername, gameName, game1);
+                        games.set(gameNum, new GameData(gameID, username, blackUsername, gameName, game1));
                     }
                     else{
                         throw new DataAccessException("already taken");
                     }
+                }
+                else if(Objects.equals(teamColor, null)){
+
                 }
                 else{
                     throw new DataAccessException("bad request");
@@ -112,7 +148,10 @@ public class Game implements GameInterface{
 
     }
     public void clear(){
-        games.clear();
+
+        if(!games.isEmpty()){
+            games.clear();
+        }
     }
 
 }
