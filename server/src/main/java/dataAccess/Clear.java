@@ -1,6 +1,6 @@
 package dataAccess;
 
-public class clear {
+public class Clear {
     public void clearData(){
         User user = new User();
         user.clear();

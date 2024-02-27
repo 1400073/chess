@@ -1,14 +1,9 @@
 package service;
-import dataAccess.Auth;
-import dataAccess.DataAccessException;
-import dataAccess.Game;
-import model.AuthData;
-import model.GameData;
-import dataAccess.clear;
+import dataAccess.Clear;
 
 public class ClearService{
     public void clear(){
-        clear clearAll = new clear();
+        Clear clearAll = new Clear();
         clearAll.clearData();
     }
 

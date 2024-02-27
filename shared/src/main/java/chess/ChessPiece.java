@@ -79,26 +79,26 @@ public class ChessPiece {
         chess.ChessPiece value = board.getPiece(myPosition);
         chess.ChessPiece.PieceType check = value.getPieceType();
         if (check == chess.ChessPiece.PieceType.BISHOP){
-            BishopMoves(board,myPosition,moves);
+            bishopMoves(board,myPosition,moves);
         }
         if (check == chess.ChessPiece.PieceType.ROOK){
-            RookMoves(board,myPosition,moves);
+            rookMoves(board,myPosition,moves);
         }
         if (check == chess.ChessPiece.PieceType.PAWN){
-            PawnMoves(board,myPosition,moves);
+            pawnMoves(board,myPosition,moves);
         }
         if (check == chess.ChessPiece.PieceType.QUEEN){
-            QueenMoves(board,myPosition,moves);
+            queenMoves(board,myPosition,moves);
         }
         if (check == chess.ChessPiece.PieceType.KING){
-            KingMoves(board,myPosition,moves);
+            kingMoves(board,myPosition,moves);
         }
         if (check == chess.ChessPiece.PieceType.KNIGHT){
-            KnightMoves(board,myPosition,moves);
+            knightMoves(board,myPosition,moves);
         }
         return moves;
     }
-    public void BishopMoves(ChessBoard board,ChessPosition myPosition, ArrayList<ChessMove> moves){
+    public void bishopMoves(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> moves){
         int i = 1;
         int j = 1;
         chess.ChessPiece value = board.getPiece(myPosition);
@@ -181,7 +181,7 @@ public class ChessPiece {
             ++j;
         }
     }
-    public void RookMoves(ChessBoard board,ChessPosition myPosition, ArrayList<ChessMove> moves){
+    public void rookMoves(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> moves){
         int i = 1;
         int j = 1;
         chess.ChessPiece value = board.getPiece(myPosition);
@@ -264,18 +264,17 @@ public class ChessPiece {
             ++j;
         }
     }
-    public void QueenMoves(ChessBoard board,ChessPosition myPosition, ArrayList<ChessMove> moves){
-        RookMoves(board,myPosition,moves);
-        BishopMoves(board,myPosition,moves);
+    public void queenMoves(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> moves){
+        rookMoves(board,myPosition,moves);
+        bishopMoves(board,myPosition,moves);
     }
-    public void PawnMoves(ChessBoard board,ChessPosition myPosition, ArrayList<ChessMove> moves) {
+    public void pawnMoves(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> moves) {
         chess.ChessPiece value = board.getPiece(myPosition);
         int i = 1;
         if(value.getTeamColor() == ChessGame.TeamColor.BLACK){
             i = -1;
         }
         ChessPosition newPosition = new ChessPosition(myPosition.getRow()+ i, myPosition.getColumn());
-
         if(newPosition.getRow()<= 8 && newPosition.getRow() > 0 && newPosition.getColumn() <=8 && newPosition.getColumn() >0){
             chess.ChessPiece check1 = board.getPiece(newPosition);
             if (check1 == null) {
@@ -295,13 +294,11 @@ public class ChessPiece {
                 }
             }
         }
-
         ChessPosition newPosition1 = new ChessPosition(myPosition.getRow()+ i, myPosition.getColumn()+1);
         if(newPosition1.getRow()<= 8 && newPosition1.getRow() > 0 && newPosition1.getColumn() <=8 && newPosition1.getColumn() >0) {
             chess.ChessPiece check1 = board.getPiece(newPosition1);
             if (check1 != null) {
                 if (check1.getTeamColor() != value.getTeamColor()) {
-
                     if (newPosition1.getRow() == 8|| newPosition1.getRow() == 1){
                         ChessMove move = new ChessMove(myPosition,newPosition1, chess.ChessPiece.PieceType.QUEEN);
                         moves.add(move);
@@ -316,11 +313,9 @@ public class ChessPiece {
                         ChessMove move = new ChessMove(myPosition, newPosition1, null);
                         moves.add(move);
                     }
-
                 }
             }
         }
-
         ChessPosition newPosition2 = new ChessPosition(myPosition.getRow()+ i, myPosition.getColumn()-1);
         if(newPosition2.getRow()<= 8 && newPosition2.getRow() > 0 && newPosition2.getColumn() <=8 && newPosition2.getColumn() >0) {
             chess.ChessPiece check1 = board.getPiece(newPosition2);
@@ -344,7 +339,6 @@ public class ChessPiece {
                 }
             }
         }
-
         ChessPosition newPosition3 = new ChessPosition(myPosition.getRow()+ 2, myPosition.getColumn());
         ChessPosition newPosition4 = new ChessPosition(myPosition.getRow()+ 1, myPosition.getColumn());
         if(myPosition.getRow() == 2 && value.getTeamColor() == ChessGame.TeamColor.WHITE) {
@@ -357,7 +351,6 @@ public class ChessPiece {
                 }
             }
         }
-
         ChessPosition newPosition5 = new ChessPosition(myPosition.getRow()- 2, myPosition.getColumn());
         ChessPosition newPosition6 = new ChessPosition(myPosition.getRow()- 1, myPosition.getColumn());
         if(myPosition.getRow() == 7 && value.getTeamColor() == ChessGame.TeamColor.BLACK) {
@@ -370,9 +363,8 @@ public class ChessPiece {
                 }
             }
         }
-
     }
-    public void KingMoves(ChessBoard board,ChessPosition myPosition, ArrayList<ChessMove> moves) {
+    public void kingMoves(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> moves) {
         chess.ChessPiece value = board.getPiece(myPosition);
         for( int i = -1; i <= 1; ++i){
             for(int j = -1; j <=1; ++j){
@@ -395,7 +387,7 @@ public class ChessPiece {
 
         }
     }
-    public void KnightMoves(ChessBoard board,ChessPosition myPosition, ArrayList<ChessMove> moves){
+    public void knightMoves(ChessBoard board, ChessPosition myPosition, ArrayList<ChessMove> moves){
         int[] list1= {1,2,-1,-2,-1,-2,1,2};
         int[] list2 ={-2,-1,2,1,-2,-1,2,1};
         chess.ChessPiece value = board.getPiece(myPosition);

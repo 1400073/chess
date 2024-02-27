@@ -8,8 +8,8 @@ import java.util.Objects;
 public class Auth implements AuthInterface{
     private static final ArrayList<AuthData> authTokens = new ArrayList<>();
 
-    public String GenerateString(){
-        String RandStringTake = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    public String generateString(){
+        String randStringTake = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
 
@@ -18,16 +18,16 @@ public class Auth implements AuthInterface{
 
         for (int i = 0; i < n; i++) {
 
-            int index = (int)(RandStringTake.length() * Math.random());
+            int index = (int)(randStringTake.length() * Math.random());
 
-            newRandString.append(RandStringTake.charAt(index));
+            newRandString.append(randStringTake.charAt(index));
         }
 
         return newRandString.toString();
     }
 
     public AuthData createAuth(String username){
-            String authTokenTemp =  GenerateString();
+            String authTokenTemp =  generateString();
             AuthData authDataTemp = new AuthData(authTokenTemp, username);
 
             authTokens.add(authDataTemp);
@@ -68,21 +68,6 @@ public class Auth implements AuthInterface{
         return username;
     }
 
-    public AuthData getAuthToken(String username)throws DataAccessException{
-        int i = 0;
-        AuthData authToken = new AuthData(null,null);
-        while(i < authTokens.size()){
-            if(Objects.equals(authTokens.get(i).username(), username)){
-                authToken = authTokens.get(i);
-            }
-            i+=1;
-        }
-        if( authToken.username()==null && authToken.authToken()==null) {
-            throw new DataAccessException("unauthorized");
-        }
-
-        return authToken;
-    }
 
     public void deleteAuth(String authorization)throws DataAccessException{
         boolean deleteSucees = false;

@@ -3,13 +3,6 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-/**
- * For a class that can manage a chess game, making moves on a board
- * <p>
- * Note: You can add to this class, but you may not alter
- * signature of the existing methods.
- */
 public class ChessGame {
     TeamColor chessTurn = TeamColor.BLACK;
     chess.ChessBoard board = new ChessBoard();
@@ -19,38 +12,16 @@ public class ChessGame {
     public ChessGame() {
 
     }
-
-    /**
-     * @return Which team's turn it is
-     */
     public TeamColor getTeamTurn() {
         return chessTurn;
     }
-
-    /**
-     * Set's which teams turn it is
-     *
-     * @param team the team whose turn it is
-     */
     public void setTeamTurn(TeamColor team) {
         chessTurn = team;
     }
-
-    /**
-     * Enum identifying the 2 possible teams in a chess game
-     */
     public enum TeamColor {
         WHITE,
         BLACK
     }
-
-    /**
-     * Gets a valid moves for a piece at the given location
-     *
-     * @param startPosition the piece to get valid moves for
-     * @return Set of valid moves for requested piece, or null if no piece at
-     * startPosition
-     */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
 
         ChessPiece piece = board.getPiece(startPosition);
@@ -60,7 +31,6 @@ public class ChessGame {
             Iterator<ChessMove> iterator2 = movesValid.iterator();
             while(iterator2.hasNext()){
                 ChessMove check = iterator2.next();
-
                 ChessPosition getposition1 = check.getStartPosition();
                 ChessPosition getposition2 = check.getEndPosition();
                 ChessPiece piece2 = board.getPiece(getposition2);
@@ -97,7 +67,6 @@ public class ChessGame {
             Iterator<ChessMove> iterator2 = movesValid.iterator();
             while(iterator2.hasNext()){
                 ChessMove check = iterator2.next();
-
                 ChessPosition getposition1 = check.getStartPosition();
                 ChessPosition getposition2 = check.getEndPosition();
                 ChessPiece piece2 = board.getPiece(getposition2);
@@ -129,18 +98,9 @@ public class ChessGame {
                 }
             }
         }
-
         return movesValid;
     }
-
-    /**
-     * Makes a move in a chess game
-     *
-     * @param move chess move to preform
-     * @throws InvalidMoveException if move is invalid
-     */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-
         ChessPiece piece = board.getPiece(move.getStartPosition());
         ChessPosition getposition1 = move.getStartPosition();
         ChessPosition getposition2 = move.getEndPosition();
@@ -189,16 +149,7 @@ public class ChessGame {
         else{
             throw new InvalidMoveException();
         }
-
-
     }
-
-    /**
-     * Determines if the given team is in check
-     *
-     * @param teamColor which team to check for check
-     * @return True if the specified team is in check
-     */
     public boolean isInCheck(TeamColor teamColor) {
         boolean checkCheck = false;
         TeamColor opposeTeam = TeamColor.BLACK;
@@ -273,9 +224,7 @@ public class ChessGame {
             moves.add(move);
             moves.add(move2);
         }
-
         Iterator<ChessMove> iterator1 = moves2.iterator();
-
         while(iterator1.hasNext()){
             ChessMove check = iterator1.next();
             for (ChessMove check1 : moves) {
@@ -304,8 +253,7 @@ public class ChessGame {
                     iterator2.remove();
 
                 }
-            }
-            else {
+            } else {
                 board.addPiece(check.getStartPosition(), null);
                 board.addPiece(check.getEndPosition(), piece);
                 if (!isInCheck(getTeamTurn())) {
@@ -344,7 +292,6 @@ public class ChessGame {
                         board.addPiece(getposition1, piece);
                         board.addPiece(getposition2, piece2);
                         checker = false;
-
                     }
                 }
                 else {
@@ -364,16 +311,8 @@ public class ChessGame {
         }
         return checker;
     }
-
-    /**
-     * Determines if the given team is in checkmate
-     *
-     * @param teamColor which team to check for checkmate
-     * @return True if the specified team is in checkmate
-     */
     public boolean isInCheckmate(TeamColor teamColor) {
        boolean checkMate = false;
-
        ChessPosition posKing = findKing(board, teamColor);
        ChessPiece piecek = board.getPiece(posKing);
        TeamColor opposeTeam = TeamColor.BLACK;
@@ -387,7 +326,6 @@ public class ChessGame {
            ChessPosition squareCheck = getCheckPosition(posKing);
            boolean tempCheck = false;
            boolean tempCheck2 = false;
-
            for(int i = 1; i <= 8; ++i){
                for(int j = 1; j <= 8; ++j){
                    ChessPosition getposition = new ChessPosition(i,j);
@@ -490,13 +428,6 @@ public ChessPosition getCheckPosition(ChessPosition posKing){
 
         return squareCheck;
 }
-    /**
-     * Determines if the given team is in stalemate, which here is defined as having
-     * no valid moves
-     *
-     * @param teamColor which team to check for stalemate
-     * @return True if the specified team is in stalemate, otherwise false
-     */
     public boolean isInStalemate(TeamColor teamColor) {
         boolean staleMate = false;
 
@@ -550,21 +481,10 @@ public ChessPosition getCheckPosition(ChessPosition posKing){
 
         return staleMate;
     }
-
-    /**
-     * Sets this game's chessboard with a given board
-     *
-     * @param board the new board to use
-     */
     public void setBoard(ChessBoard board) {
         this.board = board;
     }
 
-    /**
-     * Gets the current chessboard
-     *
-     * @return the chessboard
-     */
     public ChessBoard getBoard() {
         return board;
     }

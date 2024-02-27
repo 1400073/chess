@@ -3,13 +3,12 @@ package service;
 import dataAccess.Auth;
 import dataAccess.DataAccessException;
 import dataAccess.Game;
-import model.AuthData;
 import model.GameData;
 
 import java.util.ArrayList;
 
 public class GameService {
-    public ArrayList<GameData> ListGames(String authToken) throws DataAccessException {
+    public ArrayList<GameData> listGames(String authToken) throws DataAccessException {
         Auth auth = new Auth();
         Game game = new Game();
         ArrayList<GameData> listGames;
@@ -18,7 +17,7 @@ public class GameService {
 
         return listGames;
     }
-    public int CreateGame(String authToken, String gameName) throws DataAccessException{
+    public int createGame(String authToken, String gameName) throws DataAccessException{
         Auth auth = new Auth();
         Game game = new Game();
         int gameID = 0;
@@ -28,14 +27,14 @@ public class GameService {
         return gameID;
     }
 
-    public void JoinGame(String authToken, String TeamColor, int gameID) throws DataAccessException {
+    public void joinGame(String authToken, String teamColor, int gameID) throws DataAccessException {
         Auth auth = new Auth();
         Game game = new Game();
 
         String authorization = auth.getAuth(authToken);
         String username = auth.getUsername(authorization);
 
-        game.updateGame(username,gameID, true, TeamColor);
+        game.updateGame(username,gameID, true, teamColor);
 
     }
 

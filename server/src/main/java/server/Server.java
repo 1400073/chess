@@ -1,7 +1,6 @@
 package server;
 import com.google.gson.Gson;
 import dataAccess.DataAccessException;
-import dataAccess.Game;
 import model.*;
 import service.GameService;
 import service.UserService;
@@ -41,9 +40,10 @@ public class Server {
     private Object createGame(Request request, Response response) throws DataAccessException {
         var serialzer = new Gson();
         String authToken = request.headers("authorization");
-        gameName name = serialzer.fromJson(request.body(), gameName.class);
+        GameName name = serialzer.fromJson(request.body(), GameName.class);
         GameService gameService = new GameService();
-        try{gameNum gameID = new gameNum(gameService.CreateGame(authToken, name.gameName()));
+        try{
+            GameNum gameID = new GameNum(gameService.createGame(authToken, name.gameName()));
             return new Gson().toJson(gameID);}
         catch (DataAccessException dataEx){
             String check = dataEx.getMessage();
@@ -69,9 +69,9 @@ public class Server {
     private Object joinGame(Request request, Response response) throws DataAccessException {
         var serialzer = new Gson();
         String authToken = request.headers("authorization");
-        joinGame gameRequest = serialzer.fromJson(request.body(), joinGame.class);
+        JoinGame gameRequest = serialzer.fromJson(request.body(), JoinGame.class);
         GameService gameService = new GameService();
-        try{gameService.JoinGame(authToken,gameRequest.playerColor(), gameRequest.gameID());
+        try{gameService.joinGame(authToken,gameRequest.playerColor(), gameRequest.gameID());
             return "{}";
         }
         catch(DataAccessException dataEx){
@@ -97,7 +97,8 @@ public class Server {
     private Object listGames(Request request, Response response) throws DataAccessException{
         String authToken = request.headers("authorization");
         GameService gameService = new GameService();
-        try{listGames games = new listGames(gameService.ListGames(authToken));
+        try{
+            ListGames games = new ListGames(gameService.listGames(authToken));
             return new Gson().toJson(games);
         }
         catch(DataAccessException dataEx){

@@ -3,7 +3,6 @@ package dataAccess;
 
 import chess.ChessGame;
 import model.GameData;
-import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -11,17 +10,17 @@ import java.util.Objects;
 public class Game implements GameInterface{
     private final static ArrayList<GameData> games = new ArrayList<>();
 
-    public int GenerateNum(){
-        String RandNumTake = "0123456789";
+    public int generateNum(){
+        String randNumTake = "0123456789";
         int returnNum;
         int n = 4;
         StringBuilder newNumString = new StringBuilder(n);
 
         for (int i = 0; i < n; i++) {
 
-            int index = (int)(RandNumTake.length() * Math.random());
+            int index = (int)(randNumTake.length() * Math.random());
 
-            newNumString.append(RandNumTake.charAt(index));
+            newNumString.append(randNumTake.charAt(index));
         }
 
         returnNum = Integer.parseInt(newNumString.toString());
@@ -30,10 +29,10 @@ public class Game implements GameInterface{
     @Override
     public int createGame(String gameName) {
         ChessGame game = new ChessGame();
-        int gameID = GenerateNum();
+        int gameID = generateNum();
 
         while(checkGameID(gameID)){
-            gameID = GenerateNum();
+            gameID = generateNum();
         }
 
         GameData newGame = new GameData(gameID, null, null,gameName, game);
