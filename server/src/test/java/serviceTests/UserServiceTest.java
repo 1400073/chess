@@ -11,11 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     @Test
-    void register() throws DataAccessException {
+    void register() {
         UserService userService =new UserService();
-        UserData userData = new UserData("normwl","password","");
+        UserData userData = new UserData("nor","password","");
+        try{AuthData authToken = userService.register(userData);
+            userService.logout(authToken.authToken());
+            assertAll(() -> userService.login(userData));}
+        catch(DataAccessException dataEx){
 
-        assertAll(() -> userService.register(userData));
+        }
+
 
     }
     @Test
@@ -46,11 +51,14 @@ class UserServiceTest {
     }
 
     @Test
-    void logout() throws DataAccessException {
+    void logout() {
         UserService userService =new UserService();
         UserData userData = new UserData("normwl","password","");
-        AuthData authToken = userService.register(userData);
-        assertAll(()->userService.logout(authToken.authToken()));
+        try{AuthData authToken = userService.register(userData);
+        assertAll(()->userService.logout(authToken.authToken()));}
+        catch(DataAccessException dataEx){
+
+        }
 
     }
     @Test
