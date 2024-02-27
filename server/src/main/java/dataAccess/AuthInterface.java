@@ -7,7 +7,6 @@ public interface AuthInterface {
 
     String getAuth(String authToken)throws DataAccessException;
 
-    AuthData getAuthToken(String username)throws DataAccessException;
 
     void deleteAuth(String authorization)throws DataAccessException;
 
