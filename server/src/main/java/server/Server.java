@@ -30,11 +30,21 @@ public class Server {
         return Spark.port();
     }
 
-    private Object clear(Request request, Response response) {
+    private Object clear(Request request, Response response) throws DataAccessException {
 
-        ClearService clear = new ClearService();
-        clear.clear();
-        return "{}";
+        try {
+            ClearService clear = new ClearService();
+            clear.clear();
+            return "{}";
+        }
+        catch (DataAccessException dataEx){
+            String check = dataEx.getMessage();
+            dataException(check,response);
+            System.out.println(dataEx.getMessage());
+
+            return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
+        }
+
     }
 
     private Object createGame(Request request, Response response) throws DataAccessException {
@@ -48,6 +58,7 @@ public class Server {
         catch (DataAccessException dataEx){
             String check = dataEx.getMessage();
             dataException(check,response);
+            System.out.println(dataEx.getMessage());
 
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
@@ -67,7 +78,7 @@ public class Server {
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
             dataException(check,response);
-
+            System.out.println(dataEx.getMessage());
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
 
@@ -83,6 +94,7 @@ public class Server {
         }
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
+            System.out.println(dataEx.getMessage());
             if(Objects.equals(check, "unauthorized")){
                 response.status(401);
             }
@@ -102,6 +114,7 @@ public class Server {
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
             dataException(check,response);
+            System.out.println(dataEx.getMessage());
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
     }
@@ -118,6 +131,7 @@ public class Server {
         catch(DataAccessException dataEx){
             String check = dataEx.getMessage();
             dataException(check,response);
+            System.out.println(dataEx.getMessage());
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
     }

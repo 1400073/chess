@@ -5,7 +5,7 @@ import model.UserData;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class User implements UserInterface{
+public class User{
     private final static ArrayList<UserData> users = new ArrayList<>();
 
     public void createUser(String username, String password, String email){

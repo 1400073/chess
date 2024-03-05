@@ -9,9 +9,9 @@ import java.util.Objects;
 
 public class UserService {
    public AuthData register(UserData user) throws DataAccessException {
-      User userInterface = new User();
+      MySQLUserAccess userInterface = new MySQLUserAccess();
       UserData checkUser = userInterface.getUser(user.username());
-      Auth authInterface = new Auth();
+      MySQLAuthAccess authInterface = new MySQLAuthAccess();
       if(checkUser == null){
          if(user.password()!= null) {
             userInterface.createUser(user.username(), user.password(), user.email());
@@ -26,22 +26,22 @@ public class UserService {
       return authInterface.createAuth(user.username());
    }
    public AuthData login(UserData user) throws DataAccessException {
-      User userInterface = new User();
+      MySQLUserAccess userInterface = new MySQLUserAccess();
       UserData checkUser = userInterface.getUser(user.username());
 
       if(checkUser == null){
          throw new DataAccessException("unauthorized");
       }
-      if(!Objects.equals(user.password(), checkUser.password())){
+      if(!userInterface.verifyUser(user.username(), user.password())){
          throw new DataAccessException("unauthorized");
       }
-      Auth authInterface = new Auth();
+      MySQLAuthAccess authInterface = new MySQLAuthAccess();
       return authInterface.createAuth(user.username());
 
    }
 
    public void logout(String authToken) throws DataAccessException {
-      Auth auth = new Auth();
+      MySQLAuthAccess auth = new MySQLAuthAccess();
       auth.deleteAuth(authToken);
 
    }

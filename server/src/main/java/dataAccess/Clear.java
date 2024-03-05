@@ -1,12 +1,13 @@
 package dataAccess;
 
 public class Clear {
-    public void clearData(){
-        User user = new User();
+    public void clearData() throws DataAccessException {
+        MySQLAuthAccess auth = new MySQLAuthAccess();
+        MySQLUserAccess user = new MySQLUserAccess();
+        MySQLGameAccess game = new MySQLGameAccess();
+
         user.clear();
-        Auth auth = new Auth();
         auth.clear();
-        Game game = new Game();
         game.clear();
     }
 

@@ -1,13 +1,17 @@
-package serviceTests;
+package dataAccessTests;
+
 
 import dataAccess.Clear;
 import dataAccess.DataAccessException;
 import dataAccess.Game;
+import dataAccess.MySQLGameAccess;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClearServiceTest extends Game {
+public class CleardataAccessTest extends MySQLGameAccess {
+    public CleardataAccessTest() throws DataAccessException {
+    }
 
     @Test
     void clearTest() throws DataAccessException {
