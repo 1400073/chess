@@ -1,18 +1,13 @@
 import chess.*;
-import com.google.gson.Gson;
-import dataAccess.DataAccessException;
-import dataAccess.DatabaseManager;
 import server.Server;
 
-import java.util.Map;
-
-public class Main {
+public class ServerMain {
     public static void main(String[] args) {
 
             var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
             System.out.println("♕ 240 Chess Server: " + piece);
             Server newTest = new Server();
-            newTest.run(100);
+            newTest.run(8080);
 
 
     }

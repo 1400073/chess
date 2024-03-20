@@ -144,7 +144,7 @@ public class Server {
         UserData registerRequest = serialzer.fromJson(request.body(), UserData.class);
         try {
             AuthData auth = userService.register(registerRequest);
-            ;
+
             return new Gson().toJson(auth);
         }
         catch(DataAccessException dataEx){
@@ -153,6 +153,7 @@ public class Server {
             return new Gson().toJson(Map.of("message", String.format("Error: %s", dataEx.getMessage())));
         }
     }
+
     public void dataException(String check, Response response){
         if(Objects.equals(check, "unauthorized")){
             response.status(401);

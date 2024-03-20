@@ -84,7 +84,7 @@ public class MySQLGameAccess implements GameInterface{
                 throw new DataAccessException("bad request");
             }
             if(join){
-                if(Objects.equals(teamColor, "BLACK")){
+                if(Objects.equals(teamColor, "black")){
                     if(Objects.equals(game.blackUsername(), null)){
                         String statement = "UPDATE games SET blackUsername = ? WHERE gameID = ?";
                         executeUpdate(statement, username,gameID);
@@ -95,7 +95,7 @@ public class MySQLGameAccess implements GameInterface{
                     }
                 }
 
-                else if(Objects.equals(teamColor, "WHITE")){
+                else if(Objects.equals(teamColor, "white")){
                     if(Objects.equals(game.whiteUsername(), null)){
                         String statement = "UPDATE games SET whiteUsername = ? WHERE gameID = ?";
                         executeUpdate(statement, username,gameID);

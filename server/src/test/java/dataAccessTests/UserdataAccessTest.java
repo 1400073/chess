@@ -17,9 +17,10 @@ void register() {
     try{
         AuthData authToken = userService.register(userData);
         userService.logout(authToken.authToken());
-        assertAll(() -> userService.login(userData));}
-    catch(DataAccessException dataEx){
+        assertAll(() -> userService.login(userData));
 
+    }
+    catch(DataAccessException dataEx){
     }
 
 
@@ -27,18 +28,25 @@ void register() {
     @Test
     void registerThrow() throws DataAccessException {
         UserService userService =new UserService();
-        UserData userData = new UserData("normwl","password","");
-
+        UserData userData = new UserData("normwl","","");
+        UserData userData2 = new UserData(null,"weirdo","jjj");
         assertThrows(DataAccessException.class, () -> userService.register(userData));
+        assertThrows(DataAccessException.class, () -> userService.register(userData2));
     }
 
     @Test
     void login() {
         UserService userService =new UserService();
         UserData userData = new UserData("normwl","password","");
-        try{AuthData authToken = userService.register(userData);
+        UserData userData2 = new UserData("normwlbb","passwo","");
+        try{
+
+            AuthData authToken = userService.register(userData);
+            AuthData authToken2 = userService.register(userData2);
             userService.logout(authToken.authToken());
-            assertAll(() -> userService.login(userData));}
+            assertAll(() -> userService.login(userData));
+            assertAll(() -> userService.login(userData2));
+        }
         catch(DataAccessException dataEx){
 
         }
@@ -49,6 +57,15 @@ void register() {
         UserService userService =new UserService();
         UserData userData = new UserData("normwl","passwo","");
         assertThrows(DataAccessException.class, () -> userService.login(userData));
+        UserData userData2 = new UserData("normwlbb","passwo","");
+        try{
+            AuthData authToken = userService.register(userData2);
+            userService.logout(authToken.authToken());
+            assertAll(() -> userService.login(userData2));
+        }
+        catch(DataAccessException dataEx){
+
+        }
     }
 
     @Test
