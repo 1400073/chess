@@ -133,4 +133,8 @@ public class ChessBoard {
         addPiece(queenb1,queenb);
         addPiece(queenw1,queenw);
     }
+
+    public ChessPiece[][] getSquares() {
+        return squares;
+    }
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessPiece;
 import com.google.gson.Gson;
 import exception.ResponseException;
 import model.*;
@@ -39,6 +40,7 @@ public class ChessClient {
                 case "observe", "join" -> join(params);
                 case "create" -> create(params);
                 case "quit" -> "quit";
+                case "clear"-> clear();
                 default -> help();
             };
         } catch (ResponseException ex) {
@@ -102,11 +104,18 @@ public class ChessClient {
                 }
             }
             ChessBoard board = gameGame.getBoard();
+            ChessDraw draw1 = new ChessDraw(board);
+            draw1.draw(false);
+            draw1.draw(true);
 
             return String.format("Joined game as "+ joinGame.playerColor());
 
         }
         throw new ResponseException(400, "Expected: <username>");
+    }
+    public String clear() throws ResponseException {
+        server.clear();
+        return "Success";
     }
 
     public String help() {

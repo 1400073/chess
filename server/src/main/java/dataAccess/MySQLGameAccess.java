@@ -37,6 +37,7 @@ public class MySQLGameAccess implements GameInterface{
     public int createGame(String gameName) throws DataAccessException {
         int randoInt = generateNum();
         ChessGame chessGame = new ChessGame();
+        chessGame.getBoard().resetBoard();
         var statement = "INSERT INTO games (gameID, gameName, game) VALUES (?,?,?)";
         var json1 = new Gson().toJson(chessGame);
         executeUpdate(statement, randoInt, gameName, json1);
