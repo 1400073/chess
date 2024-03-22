@@ -149,16 +149,6 @@ public class ServerFacadeTests {
         Assertions.assertNotEquals("e", "f");
     }
 
-    @Test
-    public void makeRequestFail() throws ResponseException {
-
-        Assertions.assertNotEquals("h", "f");
-    }
-    @Test
-    public void makeRequest() throws ResponseException {
-
-        Assertions.assertEquals("f", "f");
-    }
 
 
 
