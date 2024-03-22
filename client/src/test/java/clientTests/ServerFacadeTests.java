@@ -18,8 +18,8 @@ public class ServerFacadeTests {
     @BeforeAll
     public static void init() throws ResponseException {
         server = new Server();
-        var port = server.run(8080);
-       serverFacade = new ServerFacade("http://localhost:8080");
+        var port = server.run(1000);
+       serverFacade = new ServerFacade("http://localhost:1000");
         System.out.println("Started test HTTP server on " + port);
         serverFacade.clear();
         UserData userData = new UserData("p","p","p");
@@ -45,26 +45,31 @@ public class ServerFacadeTests {
     }
     @Test
     public void loginTest() throws ResponseException {
-        UserData userData = new UserData("p","p","p");
+        UserData userData = new UserData("g","p","p");
+        AuthData authData1 = serverFacade.register1((userData));
+        serverFacade.logout(authData1.authToken());
+
         assertAll(() -> serverFacade.login(userData));
     }
     @Test
     public void logoutTest() throws ResponseException {
-        UserData userData = new UserData("e","p","p");
+        UserData userData = new UserData("io","p","p");
         AuthData authData1 = serverFacade.register1((userData));
         assertAll(() -> serverFacade.logout(authData1.authToken()));
     }
     @Test
     public void joinTest() throws ResponseException {
+        UserData userData = new UserData("iop","p","p");
+        AuthData authData1 = serverFacade.register1((userData));
         GameName gameName = new GameName("t");
-        GameNum gameNum = serverFacade.create(authData.authToken(), gameName);
+        GameNum gameNum = serverFacade.create(authData1.authToken(), gameName);
         JoinGame joinGame = new JoinGame("white", gameNum.gameID());
-        assertAll(() -> serverFacade.join(authData.authToken(),joinGame));
+        assertAll(() -> serverFacade.join(authData1.authToken(),joinGame));
     }
 
     @Test
     public void createTest() throws ResponseException {
-        UserData userData = new UserData("g","p","p");
+        UserData userData = new UserData("gg","p","p");
         AuthData authData1 = serverFacade.register1((userData));
         GameName gameName = new GameName("t");
         assertAll(() -> serverFacade.create(authData1.authToken(), gameName));
@@ -83,9 +88,8 @@ public class ServerFacadeTests {
 
     @Test
     public void clearTest() throws ResponseException {
-        GameName gameName = new GameName("t");
-        GameNum gameNum = serverFacade.create(authData.authToken(), gameName);
-        JoinGame joinGame = new JoinGame("white", gameNum.gameID());
+
+
         assertAll(() -> serverFacade.clear());
 
     }
