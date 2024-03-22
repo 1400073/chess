@@ -93,23 +93,44 @@ public class ChessClient {
     }
     public String join(String... params) throws ResponseException{
         if (params.length >= 1) {
+            if (params.length > 1) {
+                JoinGame joinGame = new JoinGame(params[0], parseInt(params[1]));
+                server.join(authData.authToken(), joinGame);
 
-            JoinGame joinGame = new JoinGame(params[0], parseInt(params[1]));
-            server.join(authData.authToken(), joinGame);
-            var games = server.listGames(authData.authToken());
-            ChessGame gameGame = new ChessGame();
-            for (var game : games) {
-                if(joinGame.gameID() == game.gameID()){
-                    gameGame = game.game();
+
+                var games = server.listGames(authData.authToken());
+                ChessGame gameGame = new ChessGame();
+                for (var game : games) {
+                    if (joinGame.gameID() == game.gameID()) {
+                        gameGame = game.game();
+                    }
                 }
+                ChessBoard board = gameGame.getBoard();
+                ChessDraw draw1 = new ChessDraw(board);
+                draw1.draw(false);
+                draw1.draw(true);
+
+                return String.format("Joined game as " + joinGame.playerColor());
             }
-            ChessBoard board = gameGame.getBoard();
-            ChessDraw draw1 = new ChessDraw(board);
-            draw1.draw(false);
-            draw1.draw(true);
+            else{
+                JoinGame joinGame = new JoinGame("", parseInt(params[0]));
+                server.join(authData.authToken(), joinGame);
 
-            return String.format("Joined game as "+ joinGame.playerColor());
 
+                var games = server.listGames(authData.authToken());
+                ChessGame gameGame = new ChessGame();
+                for (var game : games) {
+                    if (joinGame.gameID() == game.gameID()) {
+                        gameGame = game.game();
+                    }
+                }
+                ChessBoard board = gameGame.getBoard();
+                ChessDraw draw1 = new ChessDraw(board);
+                draw1.draw(false);
+                draw1.draw(true);
+
+                return String.format("Joined game as " + joinGame.playerColor());
+            }
         }
         throw new ResponseException(400, "Expected: <username>");
     }

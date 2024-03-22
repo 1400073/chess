@@ -105,7 +105,7 @@ public class MySQLGameAccess implements GameInterface{
                         throw new DataAccessException("already taken");
                     }
                 }
-                else if(Objects.equals(teamColor, null)){
+                else if(Objects.equals(teamColor, "")){
 
                 }
                 else{
