@@ -18,8 +18,8 @@ public class ServerFacadeTests {
     @BeforeAll
     public static void init() throws ResponseException {
         server = new Server();
-        var port = server.run(1000);
-       serverFacade = new ServerFacade("http://localhost:1000");
+        var port = server.run(0);
+       serverFacade = new ServerFacade("http://localhost:" + port);
         System.out.println("Started test HTTP server on " + port);
         serverFacade.clear();
         UserData userData = new UserData("p","p","p");
@@ -103,7 +103,7 @@ public class ServerFacadeTests {
         JoinGame joinGame = new JoinGame("white", gameNum.gameID());
 
         Assertions.assertNotEquals(serverFacade.listGames(authData1.authToken()),"e");
-
+        Assertions.assertThrows(ResponseException.class, ()-> serverFacade.listGames(""));
     }
 
     @Test
@@ -143,15 +143,7 @@ public class ServerFacadeTests {
         Assertions.assertThrows(ResponseException.class, ()-> serverFacade.login(userData));
     }
 
-    @Test
-    public void clearTestFail() throws ResponseException {
-        GameName gameName = new GameName("t");
-        GameNum gameNum = serverFacade.create(authData.authToken(), gameName);
-        JoinGame joinGame = new JoinGame("white", gameNum.gameID());
-        assertAll(() -> serverFacade.clear());
 
-        Assertions.assertNotEquals("e", "f");
-    }
 
 
 
