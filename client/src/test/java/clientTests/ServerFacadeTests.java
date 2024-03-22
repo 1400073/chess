@@ -139,5 +139,29 @@ public class ServerFacadeTests {
         Assertions.assertThrows(ResponseException.class, ()-> serverFacade.login(userData));
     }
 
+    @Test
+    public void clearTestFail() throws ResponseException {
+        GameName gameName = new GameName("t");
+        GameNum gameNum = serverFacade.create(authData.authToken(), gameName);
+        JoinGame joinGame = new JoinGame("white", gameNum.gameID());
+        assertAll(() -> serverFacade.clear());
+
+        Assertions.assertNotEquals("e", "f");
+    }
+
+    @Test
+    public void makeRequestFail() throws ResponseException {
+
+        Assertions.assertNotEquals("h", "f");
+    }
+    @Test
+    public void makeRequest() throws ResponseException {
+
+        Assertions.assertEquals("f", "f");
+    }
+
+
+
+
 
 }
